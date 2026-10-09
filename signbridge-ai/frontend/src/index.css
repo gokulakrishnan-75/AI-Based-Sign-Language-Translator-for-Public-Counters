@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-dark: #070C18;
+    --bg-card: #0D1527;
+    --bg-surface: #121D36;
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --glow-cyan: rgba(0, 242, 254, 0.4);
+    --font-scale: 1;
+  }
+
+  body {
+    background-color: #070C18;
+    color: #F1F5F9;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* High contrast mode */
+  body.high-contrast {
+    --bg-dark: #000000;
+    --bg-card: #050505;
+    --bg-surface: #101010;
+    --border-glass: #FFFFFF;
+    color: #FFFFFF !important;
+  }
+
+  /* Large text mode */
+  body.large-text {
+    font-size: 1.15rem;
+  }
+
+  /* Custom modern scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #070C18;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E2D4F;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00F2FE;
+  }
+}
+
+/* Glassmorphic utilities */
+.glass-panel {
+  background: rgba(13, 21, 39, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-glow {
+  background: rgba(13, 21, 39, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px rgba(0, 242, 254, 0.15);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 242, 254, 0.2);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 50%, #38BDF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #FDE047 0%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.radial-bg {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.12) 0%, transparent 60%);
+}
+
+.radial-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Cybernetic Animations for Hackathon Visual Excellence */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.25), inset 0 0 10px rgba(0, 242, 254, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 32px rgba(0, 242, 254, 0.55), inset 0 0 18px rgba(0, 242, 254, 0.22);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shimmerEffect {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+.animate-float-slow {
+  animation: floatSlow 4s infinite ease-in-out;
+}
+
+.shimmer-hover {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,242,254,0.12) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+}
+.shimmer-hover:hover {
+  animation: shimmerEffect 1.5s infinite;
+}
