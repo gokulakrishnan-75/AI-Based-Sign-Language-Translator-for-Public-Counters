@@ -12,6 +12,8 @@ import threading
 from typing import List, Dict, Any, Optional
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 # Path resolution
@@ -32,11 +34,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for frontend development
+# Enable CORS for frontend and cloud deployment
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -296,3 +298,25 @@ def save_counter_message(msg: CounterMessageRequest):
     }
     counter_sessions.insert(0, new_sess)
     return {"success": True, "session": new_sess}
+
+# ---------------------------------------------------------------------------
+# Serve Production Built Frontend (For Unified Render / Cloud Deployments)
+# ---------------------------------------------------------------------------
+dist_dir = os.path.join(project_root, "frontend", "dist")
+if os.path.isdir(dist_dir):
+    assets_dir = os.path.join(dist_dir, "assets")
+    if os.path.isdir(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="static-assets")
+
+    signs_dir = os.path.join(dist_dir, "signs")
+    if os.path.isdir(signs_dir):
+        app.mount("/signs", StaticFiles(directory=signs_dir), name="static-signs")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa_frontend(full_path: str):
+        if full_path.startswith("api"):
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        file_path = os.path.join(dist_dir, full_path)
+        if full_path and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse(os.path.join(dist_dir, "index.html"))

@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+
+# Python
+*.py[cod]
+*$py.class
+.pytest_cache/
+__pycache__/
+
+# Environments
+.env
+.env.local
+.venv
+env/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db

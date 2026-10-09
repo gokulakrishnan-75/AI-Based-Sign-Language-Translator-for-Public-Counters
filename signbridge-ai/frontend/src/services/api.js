@@ -1,6 +1,9 @@
-// API Service for SIGNBRIDGE AI FastAPI Backend
-
-const API_BASE = '/api';
+// Configurable API base for cloud deployment (Render, Vercel, etc.)
+let RAW_API_URL = (import.meta.env.VITE_API_URL || '').trim();
+if (RAW_API_URL && !RAW_API_URL.startsWith('http://') && !RAW_API_URL.startsWith('https://')) {
+  RAW_API_URL = 'https://' + RAW_API_URL;
+}
+const API_BASE = (RAW_API_URL ? RAW_API_URL.replace(/\/+$/, '') : '') + '/api';
 
 export const api = {
   async getHealth() {

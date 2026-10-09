@@ -1,0 +1,9 @@
+.git
+.agents
+__pycache__
+node_modules
+*.pyc
+*.pyo
+*.pyd
+.env
+dist
