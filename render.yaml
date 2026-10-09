@@ -1,37 +1,16 @@
 services:
   # =========================================================================
-  # 1. FastAPI Python Backend Web Service
+  # SIGNBRIDGE AI - Unified Web Service (FastAPI Backend + React Frontend SPA)
+  # Deploys as a single free-tier Web Service on Render with zero-configuration
   # =========================================================================
   - type: web
-    name: signbridge-backend
+    name: signbridge-ai
     runtime: python
-    rootDir: signbridge-ai
     plan: free
     region: oregon
-    buildCommand: pip install -r backend/requirements.txt
-    startCommand: uvicorn backend.app:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
     healthCheckPath: /api/health
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
-
-  # =========================================================================
-  # 2. React + Vite Frontend Static Site
-  # =========================================================================
-  - type: static
-    name: signbridge-frontend
-    rootDir: signbridge-ai/frontend
-    plan: free
-    region: oregon
-    buildCommand: npm install && npm run build
-    publishPath: dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          type: web
-          name: signbridge-backend
-          property: host
