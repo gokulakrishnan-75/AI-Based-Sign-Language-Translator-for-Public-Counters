@@ -75,21 +75,37 @@ def generate_canonical_sign_landmarks(sign_id):
     """
     hand = get_base_neutral_hand()
 
-    # 1. HELLO - Open palm, fingers spread naturally upright in greeting wave
+    # 1. HELLO - Open palm, all fingers SPREAD WIDE with clear gaps between fingers (greeting wave)
     if sign_id == "hello":
-        extend_finger_straight(hand, 5, np.array([0.38, 0.24, -0.05]))
+        # Mirror base hand across wrist X for left hand
+        wrist_x = hand[0, 0]
+        hand[:, 0] = wrist_x - (hand[:, 0] - wrist_x)
+        # Spread fingers wide apart (prominent gaps):
+        extend_finger_straight(hand, 5, np.array([0.58, 0.24, -0.05]))
         extend_finger_straight(hand, 9, np.array([0.50, 0.20, -0.03]))
-        extend_finger_straight(hand, 13, np.array([0.62, 0.24, 0.02]))
-        extend_finger_straight(hand, 17, np.array([0.74, 0.32, 0.04]))
-        hand[4] = [0.24, 0.50, -0.08] # Thumb spread wide
+        extend_finger_straight(hand, 13, np.array([0.40, 0.24, 0.02]))
+        extend_finger_straight(hand, 17, np.array([0.28, 0.32, 0.04]))
+        # Thumb spread wide out to the side:
+        hand[1] = [0.54, 0.76, 0.00]
+        hand[2] = [0.60, 0.68, -0.02]
+        hand[3] = [0.68, 0.60, -0.05]
+        hand[4] = [0.76, 0.52, -0.08]
 
-    # 2. THANK YOU - Hand tilted forward towards camera (flat forward hand / chin moving out)
+    # 2. THANK YOU - Authentic Left Hand Sign: Vertical flat left hand held upright at chin/face (blade palm)
     elif sign_id == "thank_you":
-        extend_finger_straight(hand, 5, np.array([0.45, 0.38, 0.14]))
-        extend_finger_straight(hand, 9, np.array([0.50, 0.36, 0.16]))
-        extend_finger_straight(hand, 13, np.array([0.55, 0.38, 0.14]))
-        extend_finger_straight(hand, 17, np.array([0.60, 0.42, 0.12]))
-        hand[4] = [0.38, 0.52, 0.08]
+        # Mirror base hand across wrist X to produce true left-hand anatomical chirality
+        wrist_x = hand[0, 0]
+        hand[:, 0] = wrist_x - (hand[:, 0] - wrist_x)
+        # Fingers pointing straight UP in vertical flat blade at chin/cheek
+        extend_finger_straight(hand, 5, np.array([0.52, 0.28, 0.05]))
+        extend_finger_straight(hand, 9, np.array([0.50, 0.26, 0.07]))
+        extend_finger_straight(hand, 13, np.array([0.48, 0.28, 0.08]))
+        extend_finger_straight(hand, 17, np.array([0.46, 0.32, 0.09]))
+        # Thumb resting vertically UP along index edge (pointing up, not tucked across palm, not spread)
+        hand[1] = [0.51, 0.76, 0.02]
+        hand[2] = [0.53, 0.68, 0.04]
+        hand[3] = [0.54, 0.58, 0.06]
+        hand[4] = [0.55, 0.48, 0.08]
 
     # 3. YES - Closed fist with thumb pointing straight UP (Thumbs-Up)
     elif sign_id == "yes":
@@ -112,13 +128,25 @@ def generate_canonical_sign_landmarks(sign_id):
         hand[3] = [0.48, 0.55, 0.02]
         hand[4] = [0.50, 0.48, 0.06]
 
-    # 5. HELP - Open asking palm reaching upward (asking for help gesture)
+    # 5. HELP - Authentic Left Hand Sign: Flat horizontal palm pointing across to the side with thumb pointing straight UP
     elif sign_id == "help":
-        extend_finger_straight(hand, 5, np.array([0.44, 0.46, -0.14]))
-        extend_finger_straight(hand, 9, np.array([0.50, 0.44, -0.15]))
-        extend_finger_straight(hand, 13, np.array([0.56, 0.46, -0.14]))
-        extend_finger_straight(hand, 17, np.array([0.62, 0.50, -0.13]))
-        hand[4] = [0.32, 0.60, -0.10]
+        # Mirror base hand across wrist X to match left hand orientation in user's photo
+        wrist_x = hand[0, 0]
+        hand[:, 0] = wrist_x - (hand[:, 0] - wrist_x)
+        # 4 fingers (Index, Middle, Ring, Pinky) extend HORIZONTALLY to the right (+X)
+        hand[5] = [0.44, 0.68, 0.02]   # Index MCP
+        hand[9] = [0.46, 0.73, 0.01]   # Middle MCP
+        hand[13] = [0.47, 0.78, 0.00]  # Ring MCP
+        hand[17] = [0.48, 0.82, -0.01] # Pinky MCP
+        extend_finger_straight(hand, 5, np.array([0.75, 0.68, 0.02]))
+        extend_finger_straight(hand, 9, np.array([0.77, 0.73, 0.01]))
+        extend_finger_straight(hand, 13, np.array([0.76, 0.78, 0.00]))
+        extend_finger_straight(hand, 17, np.array([0.72, 0.82, -0.01]))
+        # Thumb extended vertically straight UP:
+        hand[1] = [0.48, 0.77, 0.03]  # CMC
+        hand[2] = [0.46, 0.67, 0.04]  # MCP
+        hand[3] = [0.45, 0.55, 0.05]  # IP
+        hand[4] = [0.44, 0.42, 0.06]  # Tip straight UP
 
     # 6. WATER - 'W' handshape (Index, Middle, Ring straight UP and spread, Pinky curled tight, Thumb tucked)
     elif sign_id == "water":
@@ -129,27 +157,43 @@ def generate_canonical_sign_landmarks(sign_id):
         curl_thumb_tuck(hand, 1.2)
         hand[4] = hand[20] + np.array([-0.02, 0, 0.01])
 
-    # 7. PLEASE - Horizontal flat hand (palm over chest)
+    # 7. PLEASE - Authentic Left Hand Sign: Closed fist with little finger (pinky) held upright vertically
     elif sign_id == "please":
-        extend_finger_straight(hand, 5, np.array([0.26, 0.54, -0.02]))
-        extend_finger_straight(hand, 9, np.array([0.26, 0.58, 0.00]))
-        extend_finger_straight(hand, 13, np.array([0.27, 0.62, 0.02]))
-        extend_finger_straight(hand, 17, np.array([0.29, 0.66, 0.03]))
-        hand[4] = [0.34, 0.70, -0.02]
+        # Mirror base hand across wrist X for left hand
+        wrist_x = hand[0, 0]
+        hand[:, 0] = wrist_x - (hand[:, 0] - wrist_x)
+        # Curl index, middle, ring into tight fist:
+        curl_finger_tight(hand, 5, 1.0)
+        curl_finger_tight(hand, 9, 1.0)
+        curl_finger_tight(hand, 13, 1.0)
+        # Thumb folded across the front of fist:
+        curl_thumb_tuck(hand, 1.0)
+        # Pinky finger extended straight UP vertically:
+        extend_finger_straight(hand, 17, np.array([0.35, 0.24, 0.03]))
 
-    # 8. WAIT - Claw / pause gesture: All 5 fingers extended forward but bent 45 degrees at PIP joints
+    # 8. WAIT - Flat open palm, all 4 fingers FIRMLY JOINED TOGETHER (no gaps between fingers!)
     elif sign_id == "wait":
-        for i in [5, 9, 13, 17]:
-            curl_finger_tight(hand, i, 0.55)
-        hand[4] = [0.30, 0.62, 0.02]
-
-    # 9. STOP - Traffic halt: All 4 fingers stiff, straight, and parallel together upright, thumb tucked tight
-    elif sign_id == "stop":
-        extend_finger_straight(hand, 5, np.array([0.46, 0.25, -0.05]))
+        # Mirror base hand across wrist X for left hand
+        wrist_x = hand[0, 0]
+        hand[:, 0] = wrist_x - (hand[:, 0] - wrist_x)
+        # All 4 fingers stiff, straight, parallel and touching each other tightly (joined):
+        extend_finger_straight(hand, 5, np.array([0.53, 0.25, -0.05]))
         extend_finger_straight(hand, 9, np.array([0.50, 0.23, -0.03]))
-        extend_finger_straight(hand, 13, np.array([0.54, 0.25, 0.01]))
-        extend_finger_straight(hand, 17, np.array([0.58, 0.29, 0.03]))
-        hand[4] = [0.42, 0.58, -0.04] # Thumb tucked tight against index edge
+        extend_finger_straight(hand, 13, np.array([0.47, 0.25, 0.01]))
+        extend_finger_straight(hand, 17, np.array([0.44, 0.29, 0.03]))
+        # Thumb tucked tight along index edge:
+        hand[1] = [0.52, 0.76, 0.00]
+        hand[2] = [0.54, 0.68, -0.02]
+        hand[3] = [0.55, 0.60, -0.03]
+        hand[4] = [0.56, 0.54, -0.04]
+
+    # 9. STOP - Downward karate chop (dominant hand chopping downward/forward firmly - universal ISL/ASL stop)
+    elif sign_id == "stop":
+        extend_finger_straight(hand, 5, np.array([0.46, 0.58, -0.22]))
+        extend_finger_straight(hand, 9, np.array([0.50, 0.56, -0.24]))
+        extend_finger_straight(hand, 13, np.array([0.54, 0.58, -0.22]))
+        extend_finger_straight(hand, 17, np.array([0.58, 0.62, -0.20]))
+        hand[4] = [0.38, 0.70, -0.15]
 
     # 10. WHERE - Single Index finger straight UP, other 4 fingers in tight fist
     elif sign_id == "where":
@@ -164,8 +208,8 @@ def generate_canonical_sign_landmarks(sign_id):
         curl_finger_tight(hand, 13, 1.0)
         curl_finger_tight(hand, 17, 1.0)
         curl_thumb_tuck(hand, 1.0)
-        extend_finger_straight(hand, 5, np.array([0.72, 0.55, -0.03]))
-        extend_finger_straight(hand, 9, np.array([0.72, 0.60, -0.01]))
+        extend_finger_straight(hand, 5, np.array([0.76, 0.48, -0.03]))
+        extend_finger_straight(hand, 9, np.array([0.76, 0.54, -0.01]))
 
     # 12. BANK - 'B' handshape: 4 fingers upright together, thumb folded flat across palm
     elif sign_id == "bank":
@@ -180,8 +224,8 @@ def generate_canonical_sign_landmarks(sign_id):
         curl_finger_tight(hand, 13, 1.0)
         curl_finger_tight(hand, 17, 1.0)
         curl_thumb_tuck(hand, 1.0)
-        extend_finger_straight(hand, 5, np.array([0.53, 0.26, -0.04]))
-        extend_finger_straight(hand, 9, np.array([0.47, 0.25, -0.02]))
+        extend_finger_straight(hand, 5, np.array([0.55, 0.24, 0.03]))
+        extend_finger_straight(hand, 9, np.array([0.43, 0.28, -0.03]))
 
     # 14. EMERGENCY - 'E' sign: all 4 fingertips curled down resting directly on top of thumb
     elif sign_id == "emergency":
@@ -227,7 +271,7 @@ def generate_canonical_sign_landmarks(sign_id):
         curl_finger_tight(hand, 9, 1.0)
         curl_finger_tight(hand, 13, 1.0)
         curl_finger_tight(hand, 17, 1.0)
-        hand[4] = [0.47, 0.50, -0.04]
+        hand[4] = [0.52, 0.58, 0.06]
 
     # 19. POLICE - 'C' badge handshape: curved arc forming 'C'
     elif sign_id == "police":
@@ -249,35 +293,38 @@ def generate_canonical_sign_landmarks(sign_id):
             hand[mcp+1] = hand[mcp] + (hand[tip] - hand[mcp])*0.4 + [0, 0.03, 0.04]
             hand[mcp+2] = hand[mcp] + (hand[tip] - hand[mcp])*0.75 + [0, 0.02, 0.03]
 
-    # 21. GOODBYE - Flapping farewell wave: fingers curled halfway down toward palm
+    # 21. GOODBYE - Flapping farewell wave: fingers extended upright together and tilted in wave
     elif sign_id == "goodbye":
-        for i in [5, 9, 13, 17]:
-            curl_finger_tight(hand, i, 0.70)
-        hand[4] = [0.28, 0.58, -0.04]
+        extend_finger_straight(hand, 5, np.array([0.48, 0.32, 0.06]))
+        extend_finger_straight(hand, 9, np.array([0.52, 0.29, 0.06]))
+        extend_finger_straight(hand, 13, np.array([0.56, 0.32, 0.06]))
+        extend_finger_straight(hand, 17, np.array([0.60, 0.37, 0.06]))
+        hand[4] = [0.38, 0.62, 0.02]
 
-    # 22. SORRY - 'A' closed fist (thumb flat along index edge, compact)
+    # 22. SORRY - 'A' closed fist (thumb upright along radial edge of index finger)
     elif sign_id == "sorry":
         curl_finger_tight(hand, 5, 1.0)
         curl_finger_tight(hand, 9, 1.0)
         curl_finger_tight(hand, 13, 1.0)
         curl_finger_tight(hand, 17, 1.0)
-        hand[4] = [0.40, 0.58, 0.02]
+        hand[4] = [0.38, 0.54, -0.02]
 
     # 23. NAME - 'V' / 'U' shape: Index and Middle straight UP in a spread 'V' (peace sign)
     elif sign_id == "name":
         curl_finger_tight(hand, 13, 1.0)
         curl_finger_tight(hand, 17, 1.0)
         curl_thumb_tuck(hand, 1.0)
-        extend_finger_straight(hand, 5, np.array([0.42, 0.24, -0.05]))
-        extend_finger_straight(hand, 9, np.array([0.56, 0.24, -0.03]))
+        extend_finger_straight(hand, 5, np.array([0.35, 0.22, -0.05]))
+        extend_finger_straight(hand, 9, np.array([0.63, 0.22, -0.03]))
 
-    # 24. ID CARD - 'I' sign: Pinky finger straight UP, all other 4 fingers in tight fist!
+    # 24. ID CARD - Holding rectangular credential card badge with index and thumb, others in fist
     elif sign_id == "id_card":
-        curl_finger_tight(hand, 5, 1.0)
         curl_finger_tight(hand, 9, 1.0)
         curl_finger_tight(hand, 13, 1.0)
-        curl_thumb_tuck(hand, 1.0)
-        extend_finger_straight(hand, 17, np.array([0.65, 0.24, 0.03]))
+        curl_finger_tight(hand, 17, 1.0)
+        badge = np.array([0.45, 0.45, 0.05])
+        hand[4] = badge + [-0.02, 0.02, 0]
+        hand[8] = badge + [0.02, -0.02, 0]
 
     # 25. MEDICINE - Middle finger bent down into palm (pestle), other fingers relaxed
     elif sign_id == "medicine":
@@ -287,11 +334,11 @@ def generate_canonical_sign_landmarks(sign_id):
         curl_finger_tight(hand, 9, 1.3)
         hand[12] = [0.50, 0.56, 0.08]
 
-    # 26. BUS - Steering wheel grip
+    # 26. BUS - Single left hand steering grip claw
     elif sign_id == "bus":
         for i in [5, 9, 13, 17]:
-            curl_finger_tight(hand, i, 0.40)
-        hand[4] = [0.32, 0.60, -0.04]
+            curl_finger_tight(hand, i, 0.35)
+        hand[4] = [0.22, 0.54, -0.08]
 
     # 27. TIME - Index finger pointing down tapping wrist watch
     elif sign_id == "time":
@@ -353,38 +400,42 @@ def generate_canonical_sign_landmarks(sign_id):
         curl_thumb_tuck(hand, 0.9)
         extend_finger_straight(hand, 5, np.array([0.22, 0.55, -0.02]))
 
-    # 34. WHEELCHAIR - Curved hand rolling motion (claw grip)
+    # 34. WHEELCHAIR - Single left hand wheel rolling claw: fingers pushing downward and forward
     elif sign_id == "wheelchair":
-        for i in [5, 9, 13, 17]:
-            curl_finger_tight(hand, i, 0.85)
-        hand[4] = [0.38, 0.65, 0.04]
+        extend_finger_straight(hand, 5, np.array([0.42, 0.62, 0.20]))
+        extend_finger_straight(hand, 9, np.array([0.48, 0.60, 0.20]))
+        extend_finger_straight(hand, 13, np.array([0.54, 0.62, 0.20]))
+        extend_finger_straight(hand, 17, np.array([0.60, 0.66, 0.18]))
+        hand[4] = [0.36, 0.68, 0.12]
 
-    # 35. DEAF - Index pointing to ear
+    # 35. DEAF - Single left hand index pointing to ear (up-right towards ear)
     elif sign_id == "deaf":
         curl_finger_tight(hand, 9, 1.0)
         curl_finger_tight(hand, 13, 1.0)
         curl_finger_tight(hand, 17, 1.0)
         curl_thumb_tuck(hand, 0.8)
-        extend_finger_straight(hand, 5, np.array([0.30, 0.30, -0.04]))
+        extend_finger_straight(hand, 5, np.array([0.22, 0.24, -0.04]))
 
-    # 36. TRAIN - 'H' fingers pointing down-track
+    # 36. TRAIN - Single left hand two fingers extended horizontally pointing forward along track
     elif sign_id == "train":
         curl_finger_tight(hand, 13, 1.0)
         curl_finger_tight(hand, 17, 1.0)
         curl_thumb_tuck(hand, 0.8)
-        extend_finger_straight(hand, 5, np.array([0.65, 0.50, 0.04]))
-        extend_finger_straight(hand, 9, np.array([0.65, 0.56, 0.04]))
+        extend_finger_straight(hand, 5, np.array([0.58, 0.70, 0.16]))
+        extend_finger_straight(hand, 9, np.array([0.58, 0.76, 0.16]))
 
     return hand
 
 def augment_landmarks(landmarks, rng):
     """
-    Applies comprehensive data augmentation:
+    Applies comprehensive data augmentation for real-world robustness:
     - 50% chance of horizontal mirroring (left-hand vs right-hand invariance)
-    - Scale variations (0.82 to 1.18)
-    - In-plane rotation (-22 to +22 degrees)
+    - Scale variations (0.78 to 1.22)
+    - Wide in-plane rotation (-42 to +42 degrees)
+    - 3D out-of-plane perspective tilt (-22 to +22 degrees pitch/yaw)
+    - Anatomical finger geometry variations (varied finger lengths and proportions)
     - 3D translations (X, Y, Z)
-    - Fine Gaussian noise to simulate webcam landmark tracking jitter
+    - Realistic Gaussian landmark tracking jitter
     """
     pts = landmarks.copy()
 
@@ -393,35 +444,50 @@ def augment_landmarks(landmarks, rng):
         wrist_x = pts[0, 0]
         pts[:, 0] = wrist_x - (pts[:, 0] - wrist_x)
 
-    # 2. Scaling
-    scale = rng.uniform(0.82, 1.18)
+    # 2. Scaling (simulate varied distances and hand sizes)
+    scale = rng.uniform(0.78, 1.22)
     center = pts[9]
     pts = center + (pts - center) * scale
 
-    # 3. 2D In-Plane Rotation
-    angle_rad = np.radians(rng.uniform(-22.0, 22.0))
+    # 3. 2D In-Plane Rotation (wide range -42 to +42 deg)
+    angle_rad = np.radians(rng.uniform(-42.0, 42.0))
     cos_a, sin_a = np.cos(angle_rad), np.sin(angle_rad)
     R2 = np.array([[cos_a, -sin_a], [sin_a, cos_a]])
     xy = pts[:, :2] - center[:2]
     pts[:, :2] = center[:2] + np.dot(xy, R2.T)
 
-    # 4. 3D Translations
-    tx = rng.uniform(-0.07, 0.07)
-    ty = rng.uniform(-0.07, 0.07)
-    tz = rng.uniform(-0.04, 0.04)
+    # 4. Out-of-plane 3D pitch tilt (camera angle above or below)
+    pitch_rad = np.radians(rng.uniform(-22.0, 22.0))
+    cos_p, sin_p = np.cos(pitch_rad), np.sin(pitch_rad)
+    R_pitch = np.array([[1, 0, 0], [0, cos_p, -sin_p], [0, sin_p, cos_p]])
+    pts_centered = pts - pts[0]
+    pts = pts[0] + np.dot(pts_centered, R_pitch.T)
+
+    # 5. Anatomical finger variation (varied human finger lengths)
+    for tip_idx, mcp_idx in [(4, 2), (8, 5), (12, 9), (16, 13), (20, 17)]:
+        f_scale = rng.uniform(0.94, 1.06)
+        f_noise = rng.normal(0.0, 0.004, size=3)
+        pts[tip_idx] = pts[mcp_idx] + (pts[tip_idx] - pts[mcp_idx]) * f_scale + f_noise
+
+    # 6. 3D Translations
+    tx = rng.uniform(-0.09, 0.09)
+    ty = rng.uniform(-0.09, 0.09)
+    tz = rng.uniform(-0.05, 0.05)
     pts += np.array([tx, ty, tz])
 
-    # 5. Realistic Landmark Sensor Jitter
-    noise = rng.normal(0.0, 0.008, size=pts.shape)
+    # 7. MediaPipe tracking sensor jitter noise
+    noise = rng.normal(0.0, 0.009, size=pts.shape)
     pts += noise
 
     return pts
 
-def build_dataset(base_dir="signbridge-ai/ml/dataset"):
+def build_dataset(base_dir=None):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.abspath(os.path.join(script_dir, "../.."))
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
+    if base_dir is None:
+        base_dir = os.path.join(project_root, "ml", "dataset")
     from backend.services.signs_data import SUPPORTED_SIGNS
     rng = np.random.RandomState(42)
 
@@ -432,14 +498,14 @@ def build_dataset(base_dir="signbridge-ai/ml/dataset"):
     for d in [train_dir, val_dir, test_dir]:
         os.makedirs(d, exist_ok=True)
 
-    # 180 train, 35 val, 35 test = 250 samples per class = 9000 total samples
-    split_counts = [("train", 180), ("val", 35), ("test", 35)]
+    # 350 train, 50 val, 50 test = 450 samples per class = 16,200 total samples
+    split_counts = [("train", 350), ("val", 50), ("test", 50)]
 
     summary = {
         "total_signs": len(SUPPORTED_SIGNS),
         "classes": [s["name"] for s in SUPPORTED_SIGNS],
-        "splits": {"train": 180, "val": 35, "test": 35},
-        "total_samples": len(SUPPORTED_SIGNS) * (180 + 35 + 35)
+        "splits": {"train": 350, "val": 50, "test": 50},
+        "total_samples": len(SUPPORTED_SIGNS) * (350 + 50 + 50)
     }
 
     for sign in SUPPORTED_SIGNS:

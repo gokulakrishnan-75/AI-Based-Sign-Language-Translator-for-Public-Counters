@@ -30,7 +30,11 @@ import { api } from '../services/api';
 import { SUPPORTED_SIGNS } from '../data/signs';
 import { SUPPORTED_LANGUAGES, translateSign, translateSentence } from '../data/translations';
 
-export default function LiveTranslatorPage({ setActivePage, initialSelectedSign = null }) {
+export default function LiveTranslatorPage({ 
+  setActivePage, 
+  initialSelectedSign = null,
+  onForwardToCounter = null
+}) {
   const [currentPrediction, setCurrentPrediction] = useState(null);
   const [stabilizedResult, setStabilizedResult] = useState({
     stabilizedSign: null,
@@ -54,8 +58,27 @@ export default function LiveTranslatorPage({ setActivePage, initialSelectedSign 
     initialSelectedSign || SUPPORTED_SIGNS[0]
   );
   const [autoAddWords, setAutoAddWords] = useState(true);
+  const [requireIndexTrigger, setRequireIndexTrigger] = useState(false);
+  const [triggerToast, setTriggerToast] = useState(null);
+  const wasTriggerActiveRef = useRef(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showPitchBanner, setShowPitchBanner] = useState(true);
+
+  // Sync refs for high-frequency camera frame callback
+  const requireIndexTriggerRef = useRef(requireIndexTrigger);
+  useEffect(() => {
+    requireIndexTriggerRef.current = requireIndexTrigger;
+  }, [requireIndexTrigger]);
+
+  const autoAddWordsRef = useRef(autoAddWords);
+  useEffect(() => {
+    autoAddWordsRef.current = autoAddWords;
+  }, [autoAddWords]);
+
+  const soundEnabledRef = useRef(soundEnabled);
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+  }, [soundEnabled]);
 
   // Performance telemetry
   const [fps, setFps] = useState(30);
@@ -64,84 +87,128 @@ export default function LiveTranslatorPage({ setActivePage, initialSelectedSign 
   // Stabilizer instance
   const stabilizerRef = useRef(new ClientStabilizer({
     windowSize: 5,
-    confidenceThreshold: 60.0,
+    confidenceThreshold: 45.0,
     requiredStreak: 2,
     cooldownMs: 1200
   }));
 
-  // Handle incoming hand landmarks from CameraView
-  const handleLandmarksDetected = useCallback(async (landmarks) => {
-    if (!landmarks) {
-      setIsHandPresent(false);
+  const lastActiveSignRef = useRef(null);
+
+  // Handle incoming hand landmarks from CameraView (supports multi-hand and index finger trigger)
+  const handleLandmarksDetected = useCallback(async (landmarks, multiAnalysis = null) => {
+    let activeSign = null;
+    const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    if (landmarks) {
+      setIsHandPresent(true);
+
+      // 1. Run inference (Client-side zero-latency forward pass or API fallback)
+      let rawPred = clientInferenceEngine.predict(landmarks);
+      if (!rawPred) {
+        try {
+          rawPred = await api.predictLandmarks(landmarks);
+        } catch (e) {}
+      }
+
+      if (rawPred) {
+        setCurrentPrediction(rawPred);
+        if (rawPred.latency_ms !== undefined) setLatency(rawPred.latency_ms);
+
+        // 2. Run stabilization & voting
+        const stabilized = stabilizerRef.current.process(rawPred);
+        setStabilizedResult(stabilized);
+
+        activeSign = stabilized.stabilizedSign || (rawPred.confidence >= 48 ? rawPred.sign : null);
+        if (activeSign) {
+          lastActiveSignRef.current = activeSign;
+        }
+
+        // 3. Update Identified Sign when recognized
+        if (stabilized.stabilizedSign) {
+          setIdentifiedSign({
+            sign: stabilized.stabilizedSign,
+            confidence: stabilized.confidence || rawPred.confidence || 99.8,
+            timestamp: nowTime,
+            isConfirmed: true,
+            status: stabilized.status || 'High Confidence'
+          });
+        } else if (rawPred.confidence >= 48 && rawPred.sign) {
+          setIdentifiedSign(prev => {
+            if (!prev || prev.sign !== rawPred.sign || !prev.isConfirmed) {
+              return {
+                sign: rawPred.sign,
+                confidence: rawPred.confidence,
+                timestamp: nowTime,
+                isConfirmed: false,
+                status: 'Live Detection'
+              };
+            }
+            return prev;
+          });
+        }
+
+        // 4. Word commit via Index Trigger OR Auto-Append
+        if (requireIndexTriggerRef.current) {
+          if (multiAnalysis?.isTriggerActive) {
+            if (!wasTriggerActiveRef.current) {
+              wasTriggerActiveRef.current = true;
+              const signToCommit = activeSign || lastActiveSignRef.current;
+              if (signToCommit) {
+                setSentenceTokens(prev => {
+                  if (prev.length > 0 && prev[prev.length - 1] === signToCommit) return prev;
+                  return [...prev, signToCommit];
+                });
+
+                setIdentifiedHistory(prev => [{
+                  sign: signToCommit,
+                  confidence: 98.0,
+                  time: nowTime
+                }, ...prev.slice(0, 5)]);
+
+                if (soundEnabledRef.current) speechService.playChime('confirm');
+
+                setTriggerToast({ sign: signToCommit, timestamp: Date.now() });
+                setTimeout(() => setTriggerToast(null), 2500);
+              }
+            }
+          } else {
+            wasTriggerActiveRef.current = false;
+          }
+        } else {
+          // Auto-append mode using the fresh stabilized result
+          if (autoAddWordsRef.current && stabilized.shouldEmit && stabilized.stabilizedSign) {
+            const signToAdd = stabilized.stabilizedSign;
+            setIdentifiedHistory(prev => {
+              if (prev.length > 0 && prev[0].sign === signToAdd) return prev;
+              return [{
+                sign: signToAdd,
+                confidence: stabilized.confidence,
+                time: nowTime
+              }, ...prev.slice(0, 5)];
+            });
+
+            setSentenceTokens(prev => {
+              if (prev.length > 0 && prev[prev.length - 1] === signToAdd) {
+                return prev;
+              }
+              return [...prev, signToAdd];
+            });
+
+            if (soundEnabledRef.current) {
+              speechService.playChime('confirm');
+            }
+          }
+        }
+      }
+    } else {
+      // No sign hand currently detected
+      setIsHandPresent(multiAnalysis?.handsCount > 0);
       const emptyResult = stabilizerRef.current.process(null);
       setStabilizedResult(emptyResult);
       setCurrentPrediction(null);
-      return;
+      wasTriggerActiveRef.current = false;
     }
-
-    setIsHandPresent(true);
-
-    // 1. Run inference (Client-side zero-latency forward pass or API fallback)
-    let rawPred = clientInferenceEngine.predict(landmarks);
-    if (!rawPred) {
-      try {
-        rawPred = await api.predictLandmarks(landmarks);
-      } catch (e) {}
-    }
-    if (!rawPred) return;
-
-    setCurrentPrediction(rawPred);
-    if (rawPred.latency_ms !== undefined) setLatency(rawPred.latency_ms);
-
-    // 2. Run stabilization & voting
-    const stabilized = stabilizerRef.current.process(rawPred);
-    setStabilizedResult(stabilized);
-
-    const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-    // 3. Update Identified Sign when recognized
-    if (stabilized.stabilizedSign) {
-      setIdentifiedSign({
-        sign: stabilized.stabilizedSign,
-        confidence: stabilized.confidence || rawPred.confidence || 99.8,
-        timestamp: nowTime,
-        isConfirmed: true,
-        status: stabilized.status || 'High Confidence'
-      });
-    } else if (rawPred.confidence >= 65 && rawPred.sign) {
-      setIdentifiedSign(prev => {
-        if (!prev || prev.sign !== rawPred.sign || !prev.isConfirmed) {
-          return {
-            sign: rawPred.sign,
-            confidence: rawPred.confidence,
-            timestamp: nowTime,
-            isConfirmed: false,
-            status: 'Live Detection'
-          };
-        }
-        return prev;
-      });
-    }
-
-    // 4. Auto-add to sentence builder & history if newly confirmed
-    if (stabilized.shouldEmit && stabilized.stabilizedSign) {
-      setIdentifiedHistory(prev => {
-        if (prev.length > 0 && prev[0].sign === stabilized.stabilizedSign) return prev;
-        return [{
-          sign: stabilized.stabilizedSign,
-          confidence: stabilized.confidence,
-          time: nowTime
-        }, ...prev.slice(0, 5)];
-      });
-
-      if (autoAddWords) {
-        setSentenceTokens(prev => [...prev, stabilized.stabilizedSign]);
-        if (soundEnabled) {
-          speechService.playChime('confirm');
-        }
-      }
-    }
-  }, [autoAddWords, soundEnabled]);
+  }, []);
 
   // Construct readable sentence and translations
   const constructedSentence = sentenceTokens.join(' ');
@@ -197,9 +264,19 @@ export default function LiveTranslatorPage({ setActivePage, initialSelectedSign 
   };
 
   const handleConfirmAndSend = async () => {
-    if (!constructedSentence) return;
+    if (!constructedSentence && sentenceTokens.length === 0) return;
     setConfirmed(true);
     if (soundEnabled) speechService.playChime('success');
+
+    // Save strictly the detected sign tokens so Public Counter immediately receives them
+    try {
+      sessionStorage.setItem('signbridge_forwarded_signs', JSON.stringify(sentenceTokens));
+      sessionStorage.setItem('signbridge_forwarded_lang', selectedLanguage.code);
+    } catch (e) {}
+
+    if (onForwardToCounter) {
+      onForwardToCounter(sentenceTokens);
+    }
 
     await api.postCounterMessage({
       counter: "Counter 01 (Public Assistance Desk)",
@@ -211,7 +288,7 @@ export default function LiveTranslatorPage({ setActivePage, initialSelectedSign 
     setTimeout(() => {
       setConfirmed(false);
       setActivePage('counter');
-    }, 1200);
+    }, 400);
   };
 
   return (
@@ -280,7 +357,7 @@ export default function LiveTranslatorPage({ setActivePage, initialSelectedSign 
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            MediaPipe 21 Landmarks → 90 Biomechanical Features → Deep Neural Classification (36 Signs)
+            MediaPipe 21 Landmarks → 90 Biomechanical Features → Deep Neural Classification (35 Signs)
           </p>
         </div>
 
@@ -326,6 +403,8 @@ export default function LiveTranslatorPage({ setActivePage, initialSelectedSign 
             confidence={stabilizedResult.confidence || currentPrediction?.confidence || identifiedSign?.confidence}
             status={isHandPresent ? (stabilizedResult.status || 'Hand Tracked') : 'Awaiting Hand'}
             identifiedSign={identifiedSign}
+            triggerHand="Right"
+            requireIndexTrigger={requireIndexTrigger}
           />
 
           {/* Real-time Guidance Banner */}
@@ -340,7 +419,7 @@ export default function LiveTranslatorPage({ setActivePage, initialSelectedSign 
               onClick={() => setActivePage('library')}
               className="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1 shrink-0 ml-2"
             >
-              <span>Library (36 Signs)</span>
+              <span>Library (35 Signs)</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -478,6 +557,48 @@ export default function LiveTranslatorPage({ setActivePage, initialSelectedSign 
                       </div>
                     ))}
                 </div>
+              </div>
+            )}
+          </div>
+
+          {/* Index Finger Commit Trigger Control Card */}
+          <div className={`p-4 rounded-2xl border transition-all ${
+            requireIndexTrigger 
+              ? 'bg-gradient-to-r from-amber-500/10 via-[#0D1527] to-[#0A1226] border-amber-500/40 shadow-xl shadow-amber-500/5'
+              : 'bg-[#0D1527]/70 border-white/10'
+          }`}>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <span className="text-2xl p-2 rounded-xl bg-amber-400/15 border border-amber-400/30">☝️</span>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-white">Right Hand Index Trigger Mode</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                      requireIndexTrigger ? 'bg-emerald-400 text-black' : 'bg-white/10 text-slate-400'
+                    }`}>
+                      {requireIndexTrigger ? 'RIGHT HAND ☝️' : 'OFF'}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 mt-0.5">
+                    Show your <strong>Right Hand</strong> index finger (☝️) to lock & add the sign into the sentence.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setRequireIndexTrigger(!requireIndexTrigger)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 active:scale-95 ${
+                  requireIndexTrigger ? 'bg-emerald-400 text-black hover:bg-emerald-300' : 'bg-white/10 text-white hover:bg-white/20'
+                }`}
+              >
+                {requireIndexTrigger ? '☝️ Right Trigger: ON' : 'Trigger: OFF'}
+              </button>
+            </div>
+
+            {triggerToast && (
+              <div className="mt-3 p-2.5 rounded-xl bg-emerald-400 text-black font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-400/20 animate-bounce">
+                <Sparkles className="w-4 h-4" />
+                <span>☝️ Index Trigger Detected! Added "{triggerToast.sign}" to sentence!</span>
               </div>
             )}
           </div>

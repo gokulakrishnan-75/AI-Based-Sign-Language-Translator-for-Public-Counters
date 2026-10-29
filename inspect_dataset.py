@@ -1,5 +1,10 @@
+import os
 import sys
-sys.path.insert(0, 'signbridge-ai')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+if os.path.isdir(os.path.join(script_dir, 'signbridge-ai')):
+    sys.path.insert(0, os.path.join(script_dir, 'signbridge-ai'))
+else:
+    sys.path.insert(0, script_dir)
 import numpy as np
 from ml.dataset.dataset_builder import generate_canonical_sign_landmarks
 from backend.services.signs_data import SUPPORTED_SIGNS

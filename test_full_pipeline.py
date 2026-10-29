@@ -1,4 +1,9 @@
+import os
 import sys
+script_dir = os.path.dirname(os.path.abspath(__file__))
+if script_dir not in sys.path:
+    sys.path.insert(0, script_dir)
+
 import numpy as np
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score, classification_report

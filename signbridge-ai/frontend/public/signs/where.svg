@@ -31,7 +31,7 @@
 
   <!-- Gesture Vector Icon -->
   <g transform="translate(140, 95) scale(2.6) translate(-12, -12)" filter="url(#glow-where)">
-    <path d="M7 14c1 2 3 3 5 3s4-1 5-3 M12 7v3 M12 13v.01" fill="none" stroke="url(#cyanGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M12 4v10 M9 14h6v6H9z" fill="none" stroke="url(#cyanGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
   <!-- Landmark Nodes Simulation -->
@@ -44,5 +44,5 @@
 
   <!-- Text Label & Subtitle -->
   <text x="140" y="174" font-family="'Inter', sans-serif" font-weight="700" font-size="14" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.5">WHERE</text>
-  <text x="140" y="194" font-family="'Inter', sans-serif" font-weight="400" font-size="10.5" fill="#94A3B8" text-anchor="middle">Questioning Palms</text>
+  <text x="140" y="194" font-family="'Inter', sans-serif" font-weight="400" font-size="10.5" fill="#94A3B8" text-anchor="middle">Questioning Index Pointer</text>
 </svg>

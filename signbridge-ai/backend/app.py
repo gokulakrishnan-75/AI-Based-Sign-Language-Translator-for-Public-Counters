@@ -148,7 +148,8 @@ def add_to_sentence(sign: str):
     return {
         "sentence": new_sent,
         "tokens": sentence_builder.get_tokens(),
-        "spoken_text": sentence_builder.get_spoken_text()
+        "spoken_text": sentence_builder.get_spoken_text(),
+        "counter_reply": sentence_builder.get_counter_reply()
     }
 
 @app.post("/api/sentence/undo")
@@ -157,7 +158,8 @@ def undo_sentence():
     return {
         "sentence": new_sent,
         "tokens": sentence_builder.get_tokens(),
-        "spoken_text": sentence_builder.get_spoken_text()
+        "spoken_text": sentence_builder.get_spoken_text(),
+        "counter_reply": sentence_builder.get_counter_reply()
     }
 
 @app.post("/api/sentence/clear")
@@ -167,10 +169,12 @@ def clear_sentence():
     return {
         "sentence": "",
         "tokens": [],
-        "spoken_text": ""
+        "spoken_text": "",
+        "counter_reply": sentence_builder.get_counter_reply()
     }
 
 @app.get("/api/metrics")
+@app.get("/api/model/metrics")
 def get_metrics():
     metrics_path = os.path.join(project_root, "ml", "evaluation", "metrics.json")
     if os.path.exists(metrics_path):
@@ -179,6 +183,21 @@ def get_metrics():
     return {
         "status": "pending",
         "message": "Model evaluation pending. Run training pipeline to view real metrics."
+    }
+
+class TranslateRequest(BaseModel):
+    tokens: List[str]
+
+@app.post("/api/translate")
+def translate_tokens(req: TranslateRequest):
+    sb = SentenceBuilder()
+    for t in req.tokens:
+        sb.add_token(t)
+    return {
+        "tokens": sb.get_tokens(),
+        "sentence": sb.get_sentence(),
+        "spoken_text": sb.get_spoken_text(),
+        "counter_reply": sb.get_counter_reply()
     }
 
 @app.post("/api/dataset/capture")

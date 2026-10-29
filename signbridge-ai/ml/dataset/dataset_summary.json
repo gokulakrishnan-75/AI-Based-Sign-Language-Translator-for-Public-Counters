@@ -1,5 +1,5 @@
 {
-  "total_signs": 36,
+  "total_signs": 35,
   "classes": [
     "HELLO",
     "THANK YOU",
@@ -9,7 +9,6 @@
     "WATER",
     "PLEASE",
     "WAIT",
-    "STOP",
     "WHERE",
     "HOSPITAL",
     "BANK",
@@ -39,9 +38,9 @@
     "TRAIN"
   ],
   "splits": {
-    "train": 180,
-    "val": 35,
-    "test": 35
+    "train": 350,
+    "val": 50,
+    "test": 50
   },
-  "total_samples": 9000
+  "total_samples": 15750
 }

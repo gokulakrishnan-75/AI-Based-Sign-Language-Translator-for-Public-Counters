@@ -58,13 +58,6 @@ export const MULTILINGUAL_TRANSLATIONS = {
     "fr": { text: "Attendez", spoken: "Veuillez patienter un instant." },
     "de": { text: "Warten", spoken: "Bitte warten Sie einen Augenblick." }
   },
-  "STOP": {
-    "en": { text: "Stop", spoken: "Please stop immediately." },
-    "hi": { text: "रुकिए", spoken: "कृपया तुरंत रुकिए।" },
-    "es": { text: "Alto", spoken: "Por favor, deténgase inmediatamente." },
-    "fr": { text: "Arrêt", spoken: "Arrêtez-vous immédiatement s'il vous plaît." },
-    "de": { text: "Stopp", spoken: "Bitte sofort anhalten." }
-  },
   "WHERE": {
     "en": { text: "Where", spoken: "Where is this location?" },
     "hi": { text: "कहाँ", spoken: "यह स्थान कहाँ है?" },

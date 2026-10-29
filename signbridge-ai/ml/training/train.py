@@ -87,22 +87,22 @@ def train_and_evaluate(
 
     # 2. Configure Deep Neural Network Architecture
     print("[2/5] Initializing Deep Neural Network Classifier...")
-    # Hidden layers: 128 -> 64 -> 32 units with ReLU activations
-    # Adam optimizer with adaptive learning rate and early stopping
+    # Hidden layers: 160 -> 96 -> 48 units with ReLU activations
+    # Adam optimizer with adaptive learning rate, early stopping, and tuned L2 regularization
     model = MLPClassifier(
-        hidden_layer_sizes=(128, 64, 32),
+        hidden_layer_sizes=(160, 96, 48),
         activation="relu",
         solver="adam",
-        alpha=0.0005,           # L2 weight regularization
-        batch_size=32,
+        alpha=0.0003,           # L2 weight regularization
+        batch_size=64,
         learning_rate="adaptive",
-        learning_rate_init=0.002,
-        max_iter=250,
+        learning_rate_init=0.0015,
+        max_iter=350,
         shuffle=True,
         random_state=42,
         early_stopping=True,
-        validation_fraction=0.12,
-        n_iter_no_change=18,
+        validation_fraction=0.10,
+        n_iter_no_change=25,
         verbose=False
     )
 
@@ -159,7 +159,7 @@ def train_and_evaluate(
     metrics_payload = {
         "status": "evaluated",
         "evaluated_at": time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime()),
-        "model_architecture": f"Deep MLP ({FEATURE_DIM} -> 128 -> 64 -> 32 -> {len(SUPPORTED_SIGNS)})",
+        "model_architecture": f"Deep MLP ({FEATURE_DIM} -> 160 -> 96 -> 48 -> {len(SUPPORTED_SIGNS)})",
         "framework": "scikit-learn / NumPy Neural Network Engine",
         "training_samples": len(X_train),
         "validation_samples": len(X_val),

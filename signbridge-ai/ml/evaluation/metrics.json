@@ -1,62 +1,23 @@
 {
   "status": "evaluated",
-  "evaluated_at": "2026-10-03 12:53:09 UTC",
-  "model_architecture": "Deep MLP (90 -> 128 -> 64 -> 32 -> 36)",
+  "evaluated_at": "2026-10-28 15:16:06 UTC",
+  "model_architecture": "Deep MLP (90 -> 160 -> 96 -> 48 -> 35)",
   "framework": "scikit-learn / NumPy Neural Network Engine",
-  "training_samples": 6486,
-  "validation_samples": 1260,
-  "test_samples": 1260,
-  "total_classes": 36,
-  "training_iterations": 30,
-  "training_duration_seconds": 4.04,
-  "test_accuracy": 100.0,
-  "precision": 100.0,
-  "recall": 100.0,
-  "f1_score": 100.0,
-  "avg_latency_ms": 0.02,
+  "training_samples": 12256,
+  "validation_samples": 1750,
+  "test_samples": 1750,
+  "total_classes": 35,
+  "training_iterations": 29,
+  "training_duration_seconds": 11.92,
+  "test_accuracy": 99.71,
+  "precision": 99.74,
+  "recall": 99.71,
+  "f1_score": 99.71,
+  "avg_latency_ms": 0.03,
   "estimated_fps": 1000,
   "confusion_matrix": [
     [
-      35,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -94,8 +55,7 @@
     ],
     [
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -133,8 +93,7 @@
     [
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -172,8 +131,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -211,9 +169,45 @@
       0,
       0,
       0,
+      50,
       0,
-      35,
       0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      50,
       0,
       0,
       0,
@@ -251,46 +245,7 @@
       0,
       0,
       0,
-      35,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -328,9 +283,45 @@
       0,
       0,
       0,
+      50,
       0,
-      35,
       0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      50,
       0,
       0,
       0,
@@ -368,46 +359,7 @@
       0,
       0,
       0,
-      35,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -445,9 +397,45 @@
       0,
       0,
       0,
+      50,
       0,
-      35,
       0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      50,
       0,
       0,
       0,
@@ -485,46 +473,7 @@
       0,
       0,
       0,
-      35,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -562,9 +511,45 @@
       0,
       0,
       0,
+      50,
       0,
-      35,
       0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      50,
       0,
       0,
       0,
@@ -602,46 +587,7 @@
       0,
       0,
       0,
-      35,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -679,8 +625,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -718,9 +663,45 @@
       0,
       0,
       0,
+      45,
       0,
-      35,
+      5,
       0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      50,
       0,
       0,
       0,
@@ -758,46 +739,7 @@
       0,
       0,
       0,
-      35,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -835,8 +777,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -874,8 +815,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -913,8 +853,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -952,8 +891,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -991,8 +929,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -1030,8 +967,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -1069,8 +1005,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -1108,8 +1043,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -1147,8 +1081,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -1186,8 +1119,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -1225,8 +1157,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0,
@@ -1264,8 +1195,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0,
       0
@@ -1303,8 +1233,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0,
       0
     ],
@@ -1342,8 +1271,7 @@
       0,
       0,
       0,
-      0,
-      35,
+      50,
       0
     ],
     [
@@ -1381,8 +1309,7 @@
       0,
       0,
       0,
-      0,
-      35
+      50
     ]
   ],
   "class_labels": [
@@ -1394,7 +1321,6 @@
     "WATER",
     "PLEASE",
     "WAIT",
-    "STOP",
     "WHERE",
     "HOSPITAL",
     "BANK",
@@ -1430,7 +1356,7 @@
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
       "class_id": 1,
@@ -1438,7 +1364,7 @@
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
       "class_id": 2,
@@ -1446,7 +1372,7 @@
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
       "class_id": 3,
@@ -1454,7 +1380,7 @@
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
       "class_id": 4,
@@ -1462,7 +1388,7 @@
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
       "class_id": 5,
@@ -1470,7 +1396,7 @@
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
       "class_id": 6,
@@ -1478,7 +1404,7 @@
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
       "class_id": 7,
@@ -1486,383 +1412,370 @@
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
       "class_id": 8,
-      "name": "STOP",
-      "precision": 100.0,
-      "recall": 100.0,
-      "f1_score": 100.0,
-      "samples": 35
-    },
-    {
-      "class_id": 9,
       "name": "WHERE",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 10,
+      "class_id": 9,
       "name": "HOSPITAL",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 11,
+      "class_id": 10,
       "name": "BANK",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 12,
+      "class_id": 11,
       "name": "RAILWAY",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 13,
+      "class_id": 12,
       "name": "EMERGENCY",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 14,
+      "class_id": 13,
       "name": "DOCTOR",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 15,
+      "class_id": 14,
       "name": "TICKET",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 16,
+      "class_id": 15,
       "name": "MONEY",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 17,
+      "class_id": 16,
       "name": "RESTROOM",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
+    },
+    {
+      "class_id": 17,
+      "name": "POLICE",
+      "precision": 100.0,
+      "recall": 90.0,
+      "f1_score": 94.7,
+      "samples": 50
     },
     {
       "class_id": 18,
-      "name": "POLICE",
-      "precision": 100.0,
-      "recall": 100.0,
-      "f1_score": 100.0,
-      "samples": 35
-    },
-    {
-      "class_id": 19,
       "name": "FOOD",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
+    },
+    {
+      "class_id": 19,
+      "name": "GOODBYE",
+      "precision": 90.9,
+      "recall": 100.0,
+      "f1_score": 95.2,
+      "samples": 50
     },
     {
       "class_id": 20,
-      "name": "GOODBYE",
-      "precision": 100.0,
-      "recall": 100.0,
-      "f1_score": 100.0,
-      "samples": 35
-    },
-    {
-      "class_id": 21,
       "name": "SORRY",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 22,
+      "class_id": 21,
       "name": "NAME",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 23,
+      "class_id": 22,
       "name": "ID CARD",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 24,
+      "class_id": 23,
       "name": "MEDICINE",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 25,
+      "class_id": 24,
       "name": "BUS",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 26,
+      "class_id": 25,
       "name": "TIME",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 27,
+      "class_id": 26,
       "name": "PAY",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 28,
+      "class_id": 27,
       "name": "RECEIPT",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 29,
+      "class_id": 28,
       "name": "FORM",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 30,
+      "class_id": 29,
       "name": "SIGNATURE",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 31,
+      "class_id": 30,
       "name": "CALL",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 32,
+      "class_id": 31,
       "name": "PAIN",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 33,
+      "class_id": 32,
       "name": "WHEELCHAIR",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 34,
+      "class_id": 33,
       "name": "DEAF",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     },
     {
-      "class_id": 35,
+      "class_id": 34,
       "name": "TRAIN",
       "precision": 100.0,
       "recall": 100.0,
       "f1_score": 100.0,
-      "samples": 35
+      "samples": 50
     }
   ],
   "loss_history": [
     {
       "iteration": 1,
-      "train_loss": 1.08207,
-      "val_loss": 1.13617
+      "train_loss": 0.88788,
+      "val_loss": 0.93227
     },
     {
       "iteration": 2,
-      "train_loss": 0.11224,
-      "val_loss": 0.12257
+      "train_loss": 0.05088,
+      "val_loss": 0.05556
     },
     {
       "iteration": 3,
-      "train_loss": 0.02693,
-      "val_loss": 0.0295
+      "train_loss": 0.01448,
+      "val_loss": 0.01586
     },
     {
       "iteration": 4,
-      "train_loss": 0.01213,
-      "val_loss": 0.01282
+      "train_loss": 0.02017,
+      "val_loss": 0.02132
     },
     {
       "iteration": 5,
-      "train_loss": 0.0391,
-      "val_loss": 0.03958
+      "train_loss": 0.01202,
+      "val_loss": 0.01217
     },
     {
       "iteration": 6,
-      "train_loss": 0.0065,
-      "val_loss": 0.00651
+      "train_loss": 0.00298,
+      "val_loss": 0.00299
     },
     {
       "iteration": 7,
-      "train_loss": 0.00541,
-      "val_loss": 0.0056
+      "train_loss": 0.00262,
+      "val_loss": 0.00271
     },
     {
       "iteration": 8,
-      "train_loss": 0.00521,
-      "val_loss": 0.00564
+      "train_loss": 0.03491,
+      "val_loss": 0.0378
     },
     {
       "iteration": 9,
-      "train_loss": 0.00461,
-      "val_loss": 0.00507
+      "train_loss": 0.0045,
+      "val_loss": 0.00495
     },
     {
       "iteration": 10,
-      "train_loss": 0.00457,
-      "val_loss": 0.00489
+      "train_loss": 0.00187,
+      "val_loss": 0.002
     },
     {
       "iteration": 11,
-      "train_loss": 0.00466,
-      "val_loss": 0.00477
+      "train_loss": 0.00338,
+      "val_loss": 0.00346
     },
     {
       "iteration": 12,
-      "train_loss": 0.00424,
-      "val_loss": 0.00424
+      "train_loss": 0.00171,
+      "val_loss": 0.00171
     },
     {
       "iteration": 13,
-      "train_loss": 0.00416,
-      "val_loss": 0.00426
+      "train_loss": 0.00162,
+      "val_loss": 0.00166
     },
     {
       "iteration": 14,
-      "train_loss": 0.00414,
-      "val_loss": 0.00443
+      "train_loss": 0.00159,
+      "val_loss": 0.0017
     },
     {
       "iteration": 15,
-      "train_loss": 0.09162,
-      "val_loss": 0.10074
+      "train_loss": 0.00155,
+      "val_loss": 0.0017
     },
     {
       "iteration": 16,
-      "train_loss": 0.00699,
-      "val_loss": 0.00757
+      "train_loss": 0.00153,
+      "val_loss": 0.00166
     },
     {
       "iteration": 17,
-      "train_loss": 0.005,
-      "val_loss": 0.00518
+      "train_loss": 0.02149,
+      "val_loss": 0.02226
     },
     {
       "iteration": 18,
-      "train_loss": 0.00473,
-      "val_loss": 0.00474
+      "train_loss": 0.01986,
+      "val_loss": 0.0199
     },
     {
       "iteration": 19,
-      "train_loss": 0.00463,
-      "val_loss": 0.00469
+      "train_loss": 0.00228,
+      "val_loss": 0.00231
     },
     {
       "iteration": 20,
-      "train_loss": 0.00454,
-      "val_loss": 0.0048
+      "train_loss": 0.00195,
+      "val_loss": 0.00206
     },
     {
       "iteration": 21,
-      "train_loss": 0.00447,
-      "val_loss": 0.0049
+      "train_loss": 0.00166,
+      "val_loss": 0.00182
     },
     {
       "iteration": 22,
-      "train_loss": 0.0044,
-      "val_loss": 0.0048
+      "train_loss": 0.00165,
+      "val_loss": 0.0018
     },
     {
       "iteration": 23,
-      "train_loss": 0.00434,
-      "val_loss": 0.00456
+      "train_loss": 0.00161,
+      "val_loss": 0.00169
     },
     {
       "iteration": 24,
-      "train_loss": 0.0043,
-      "val_loss": 0.00433
+      "train_loss": 0.0016,
+      "val_loss": 0.00161
     },
     {
       "iteration": 25,
-      "train_loss": 0.00425,
-      "val_loss": 0.00427
+      "train_loss": 0.00158,
+      "val_loss": 0.00159
     },
     {
       "iteration": 26,
-      "train_loss": 0.01428,
-      "val_loss": 0.0149
+      "train_loss": 0.00157,
+      "val_loss": 0.00164
     },
     {
       "iteration": 27,
-      "train_loss": 0.07121,
-      "val_loss": 0.07749
+      "train_loss": 0.00157,
+      "val_loss": 0.00171
     },
     {
       "iteration": 28,
-      "train_loss": 0.00523,
-      "val_loss": 0.00574
+      "train_loss": 0.00155,
+      "val_loss": 0.0017
     },
     {
       "iteration": 29,
-      "train_loss": 0.00504,
-      "val_loss": 0.00536
-    },
-    {
-      "iteration": 30,
-      "train_loss": 0.00494,
-      "val_loss": 0.00502
+      "train_loss": 0.00154,
+      "val_loss": 0.00164
     }
   ]
 }

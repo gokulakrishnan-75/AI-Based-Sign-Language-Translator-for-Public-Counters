@@ -1,5 +1,10 @@
+import os
 import sys
-sys.path.insert(0, 'signbridge-ai')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+if os.path.isdir(os.path.join(script_dir, 'signbridge-ai')):
+    sys.path.insert(0, os.path.join(script_dir, 'signbridge-ai'))
+else:
+    sys.path.insert(0, script_dir)
 import numpy as np
 
 def test_canonical():

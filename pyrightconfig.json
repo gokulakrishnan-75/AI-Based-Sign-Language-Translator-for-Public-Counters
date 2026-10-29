@@ -1,0 +1,10 @@
+{
+  "include": [
+    ".",
+    "signbridge-ai"
+  ],
+  "extraPaths": [
+    "./signbridge-ai",
+    "."
+  ]
+}

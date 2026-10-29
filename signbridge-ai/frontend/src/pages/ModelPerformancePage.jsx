@@ -113,7 +113,7 @@ export default function ModelPerformancePage() {
         </div>
         <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-xs">
           <span className="text-slate-400 block text-[10px] uppercase font-mono">Architecture</span>
-          <span className="font-bold text-cyan-300">{metrics.model_architecture || "Deep MLP (90→128→64→32→36)"}</span>
+          <span className="font-bold text-cyan-300">{metrics.model_architecture || "Deep MLP (90→160→96→48→35)"}</span>
         </div>
       </div>
 
@@ -165,7 +165,7 @@ export default function ModelPerformancePage() {
             <Gauge className="w-4 h-4 text-sky-400" />
           </div>
           <div className="text-3xl sm:text-4xl font-black text-white">
-            {metrics.total_classes || 36} Signs
+            {metrics.total_classes || 35} Signs
           </div>
           <p className="text-[11px] text-slate-400 mt-2">
             Converged in {metrics.training_iterations} epochs ({metrics.training_duration_seconds}s)
@@ -237,7 +237,7 @@ export default function ModelPerformancePage() {
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>Per-Class Classification Metrics (All {metrics.total_classes || 36} Signs)</span>
+                <span>Per-Class Classification Metrics (All {metrics.total_classes || 35} Signs)</span>
               </h3>
               <p className="text-xs text-slate-400">
                 Precision, recall, and F1 score verified on the held-out test dataset.

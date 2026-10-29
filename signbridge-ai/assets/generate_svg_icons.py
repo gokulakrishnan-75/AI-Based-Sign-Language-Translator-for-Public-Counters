@@ -2,42 +2,40 @@ import os
 
 SIGNS = [
     ("hello", "HELLO", "Open Hand Wave", "M12 4v8 M8 6v6 M16 6v6 M20 8v5 M4 9v6 M7 18h10c2 0 3-1 3-3V12 M7 18l-3-4"),
-    ("thank_you", "THANK YOU", "Hand from Chin to Front", "M12 6c-2 0-3 2-3 4v4 M12 6c2 0 3 2 3 4v4 M9 18l3 3 6-6 M12 14v7"),
-    ("yes", "YES", "Fist with Upright Thumb", "M9 10h6v8H9z M9 10V6a2 2 0 0 1 4 0v4 M12 18v2"),
-    ("no", "NO", "Snap Index/Middle to Thumb", "M8 8l8 8 M16 8l-8 8 M7 12h10"),
-    ("help", "HELP", "Fist on Supporting Palm", "M5 19h14 M12 15V8a2 2 0 0 1 4 0v7 M8 12h8 M12 4l-2 2h4z"),
+    ("thank_you", "THANK YOU", "Vertical Blade at Chin", "M12 6c-2 0-3 2-3 4v4 M12 6c2 0 3 2 3 4v4 M9 18l3 3 6-6 M12 14v7"),
+    ("yes", "YES", "Left Hand Thumbs Up", "M9 10h6v8H9z M9 10V6a2 2 0 0 1 4 0v4 M12 18v2"),
+    ("no", "NO", "Snap Fingers to Thumb", "M8 8l8 8 M16 8l-8 8 M7 12h10"),
+    ("help", "HELP", "Horizontal Palm Thumb Up", "M5 19h14 M12 15V8a2 2 0 0 1 4 0v7 M8 12h8 M12 4l-2 2h4z"),
     ("water", "WATER", "W Shape Tap", "M6 6l3 12 3-8 3 8 3-12 M12 2v2"),
-    ("please", "PLEASE", "Circular Palm Rub", "M12 12m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0 M12 9l2 3-2 3"),
-    ("wait", "WAIT", "Palm Out Fingers Spread", "M6 8v6 M9 6v8 M12 5v9 M15 6v8 M18 8v6 M6 14c0 3 2.5 5 6 5s6-2 6-5"),
-    ("stop", "STOP", "Firm Front Palm", "M7 7h10v10H7z M12 4v3 M12 17v3 M4 12h3 M17 12h3"),
-    ("where", "WHERE", "Questioning Palms", "M7 14c1 2 3 3 5 3s4-1 5-3 M12 7v3 M12 13v.01"),
-    ("hospital", "HOSPITAL", "Medical Cross +", "M12 5v14 M5 12h14"),
-    ("bank", "BANK", "Currency Motion", "M6 8h12v8H6z M12 10v4 M10 12h4"),
-    ("railway", "RAILWAY", "Track Line Motion", "M5 7l14 10 M5 17L19 7 M8 9l8 6"),
-    ("emergency", "EMERGENCY", "Urgent Alert Gesture", "M12 4l8 14H4z M12 9v4 M12 15h.01"),
-    ("doctor", "DOCTOR", "Wrist Pulse Check", "M4 14h16 M10 10l2 4 3-6 2 2"),
-    ("ticket", "TICKET", "Card Clip Motion", "M6 7h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z M10 7v10"),
+    ("please", "PLEASE", "Fist with Pinky Up", "M12 12m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0 M12 9l2 3-2 3"),
+    ("wait", "WAIT", "Firm Joined Palm", "M6 8v6 M9 6v8 M12 5v9 M15 6v8 M18 8v6 M6 14c0 3 2.5 5 6 5s6-2 6-5"),
+    ("where", "WHERE", "Questioning Index Pointer", "M12 4v10 M9 14h6v6H9z"),
+    ("hospital", "HOSPITAL", "Medical 'H' Handshape", "M12 5v14 M5 12h14"),
+    ("bank", "BANK", "B Handshape Thumb Folded", "M6 8h12v8H6z M12 10v4 M10 12h4"),
+    ("railway", "RAILWAY", "R Crossed Fingers Track", "M5 7l14 10 M5 17L19 7 M8 9l8 6"),
+    ("emergency", "EMERGENCY", "E Handshape Alert", "M12 4l8 14H4z M12 9v4 M12 15h.01"),
+    ("doctor", "DOCTOR", "D Handshape Physician", "M4 14h16 M10 10l2 4 3-6 2 2"),
+    ("ticket", "TICKET", "X Bent Hook Clip", "M6 7h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z M10 7v10"),
     ("money", "MONEY", "Thumb-Finger Rub", "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z M12 11v2 M11 12h2"),
     ("restroom", "RESTROOM", "Service Sign 'T'", "M6 6h12 M12 6v12 M9 18h6"),
-    ("police", "POLICE", "Shield / Badge", "M12 4L5 7v6c0 5 4 8 7 9 3-1 7-4 7-9V7z"),
-    ("food", "FOOD", "Fingers to Lips", "M12 15c-3 0-5-2-5-5a5 5 0 0 1 10 0c0 3-2 5-5 5z M12 6v4"),
-    # New expanded signs
+    ("police", "POLICE", "C Shield / Badge", "M12 4L5 7v6c0 5 4 8 7 9 3-1 7-4 7-9V7z"),
+    ("food", "FOOD", "Tapered Cluster to Lips", "M12 15c-3 0-5-2-5-5a5 5 0 0 1 10 0c0 3-2 5-5 5z M12 6v4"),
     ("goodbye", "GOODBYE", "Farewell Waving Hand", "M12 4v8 M8 6v6 M16 6v6 M4 8l16 0 M7 18h10"),
-    ("sorry", "SORRY", "Heart Circular Rub", "M12 8c2-2 5-1 5 2 0 4-5 8-5 8s-5-4-5-8c0-3 3-4 5-2z"),
-    ("name", "NAME", "Crossed 'H' Taps", "M7 8h10 M7 16h10 M12 5v14"),
-    ("id_card", "ID CARD", "Badge Credential", "M4 5h16v14H4z M8 9h8 M8 13h5"),
-    ("medicine", "MEDICINE", "Mortar Pestle Grind", "M6 10a6 6 0 0 0 12 0H6z M12 4v6 M10 4h4"),
-    ("bus", "BUS", "Steering Wheel Pose", "M12 12m-8 0a8 8 0 1 0 16 0a8 8 0 1 0 -16 0 M12 4v16 M4 12h16"),
-    ("time", "TIME", "Wristwatch Tap", "M12 12m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0 M12 8v4l3 3 M9 2h6 M9 22h6"),
-    ("pay", "PAY", "Transfer Cash", "M5 12h14 M14 7l5 5-5 5"),
-    ("receipt", "RECEIPT", "Tear Token Slip", "M6 4h12l-2 16H8z M9 9h6 M9 13h4"),
-    ("form", "FORM", "Document Outline", "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6"),
-    ("signature", "SIGNATURE", "Sign Name Scribble", "M4 18c4-4 8 2 12-4 M16 10l3-3 2 2-3 3z"),
-    ("call", "CALL", "Telephone Hand Shape", "M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"),
-    ("pain", "PAIN", "Opposing Pain Pointers", "M4 12h6 M14 12h6 M8 9l3 3-3 3 M16 9l-3 3 3 3"),
-    ("wheelchair", "WHEELCHAIR", "Mobility Wheel", "M9 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0 M11 8v5l4 3 M7 18a5 5 0 1 0 10 0"),
+    ("sorry", "SORRY", "A Fist Heart Circular", "M12 8c2-2 5-1 5 2 0 4-5 8-5 8s-5-4-5-8c0-3 3-4 5-2z"),
+    ("name", "NAME", "V Peace Sign Identity", "M7 8h10 M7 16h10 M12 5v14"),
+    ("id_card", "ID CARD", "L Frame Credential", "M4 5h16v14H4z M8 9h8 M8 13h5"),
+    ("medicine", "MEDICINE", "Pestle Medication Motion", "M6 10a6 6 0 0 0 12 0H6z M12 4v6 M10 4h4"),
+    ("bus", "BUS", "Steering Claw Grip", "M12 12m-8 0a8 8 0 1 0 16 0a8 8 0 1 0 -16 0 M12 4v16 M4 12h16"),
+    ("time", "TIME", "Index Wristwatch Tap", "M12 12m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0 M12 8v4l3 3 M9 2h6 M9 22h6"),
+    ("pay", "PAY", "Forward Delivery Handover", "M5 12h14 M14 7l5 5-5 5"),
+    ("receipt", "RECEIPT", "Pinch Token Slip", "M6 4h12l-2 16H8z M9 9h6 M9 13h4"),
+    ("form", "FORM", "Corner Boundary Outline", "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6"),
+    ("signature", "SIGNATURE", "Pen Writing Grip", "M4 18c4-4 8 2 12-4 M16 10l3-3 2 2-3 3z"),
+    ("call", "CALL", "Y Telephone Hand Shape", "M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"),
+    ("pain", "PAIN", "Inward Pain Pointer", "M4 12h6 M14 12h6 M8 9l3 3-3 3 M16 9l-3 3 3 3"),
+    ("wheelchair", "WHEELCHAIR", "Wheel Push Claw", "M9 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0 M11 8v5l4 3 M7 18a5 5 0 1 0 10 0"),
     ("deaf", "DEAF", "Ear to Mouth Touch", "M7 8a4 4 0 0 1 8 0c0 3-2 5-4 6v2 M12 18h.01"),
-    ("train", "TRAIN", "Rail Track Transit", "M6 4h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z M8 18l-2 3 M16 18l2 3 M9 8h6")
+    ("train", "TRAIN", "Two-Finger Forward Track", "M6 4h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z M8 18l-2 3 M16 18l2 3 M9 8h6")
 ]
 
 TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 220" width="100%" height="100%">
@@ -90,9 +88,13 @@ TEMPLATE = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 220" widt
 </svg>
 """
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(script_dir, ".."))
+
 dest_dirs = [
-    "signbridge-ai/frontend/public/signs",
-    "signbridge-ai/assets/signs"
+    os.path.join(project_root, "frontend", "public", "signs"),
+    os.path.join(project_root, "frontend", "dist", "signs"),
+    os.path.join(project_root, "assets", "signs")
 ]
 
 for d in dest_dirs:
@@ -102,4 +104,4 @@ for d in dest_dirs:
         with open(os.path.join(d, f"{sign_id}.svg"), "w", encoding="utf-8") as f:
             f.write(svg_content)
 
-print(f"Generated {len(SIGNS)} SVG sign illustrations in {len(dest_dirs)} locations.")
+print(f"Generated {len(SIGNS)} SVG sign illustrations across {len(dest_dirs)} locations.")

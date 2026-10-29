@@ -1,13 +1,24 @@
+import os
 import sys
-sys.path.insert(0, 'signbridge-ai')
-import joblib, json, numpy as np
+import json
+import joblib
+import numpy as np
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(script_dir, "signbridge-ai") if os.path.isdir(os.path.join(script_dir, "signbridge-ai")) else script_dir
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from ml.preprocessing.features import normalize_landmarks
 from ml.dataset.dataset_builder import generate_canonical_sign_landmarks, augment_landmarks
 from backend.services.signs_data import SUPPORTED_SIGNS
 
-model = joblib.load('signbridge-ai/ml/exported_models/sign_classifier.joblib')
-with open('signbridge-ai/ml/exported_models/model_weights.json') as f:
-    classes = json.load(f)['classes']
+model_path = os.path.join(project_root, "ml", "exported_models", "sign_classifier.joblib")
+weights_path = os.path.join(project_root, "ml", "exported_models", "model_weights.json")
+
+model = joblib.load(model_path)
+with open(weights_path, "r", encoding="utf-8") as f:
+    classes = json.load(f)["classes"]
 
 rng = np.random.RandomState(999)
 

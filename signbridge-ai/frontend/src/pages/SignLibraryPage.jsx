@@ -107,14 +107,14 @@ export default function SignLibraryPage({ setActivePage, onSelectSignForPractice
             </h1>
             
             <p className="text-sm text-slate-300 leading-relaxed">
-              Explore 36 verified public service gestures engineered for hospitals, police desks, railway counters, and municipal offices. Featuring studio hand photography, 21-landmark biometric blueprints, and multilingual audio pronunciations.
+              Explore 35 verified public service gestures engineered for hospitals, police desks, railway counters, and municipal offices. Featuring studio hand photography, 21-landmark biometric blueprints, and multilingual audio pronunciations.
             </p>
           </div>
 
           {/* 4 Telemetry Stats Badges */}
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 shrink-0">
             <div className="p-3.5 rounded-2xl bg-[#070D1E]/90 border border-white/10 text-center">
-              <div className="text-xl sm:text-2xl font-black text-cyan-400">36</div>
+              <div className="text-xl sm:text-2xl font-black text-cyan-400">35</div>
               <div className="text-[10px] font-mono uppercase text-slate-400 font-semibold tracking-wider">
                 Public Signs
               </div>

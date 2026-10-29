@@ -17,6 +17,7 @@ export default function App() {
   const [activePage, setActivePage] = useState('home');
   const [demoModalOpen, setDemoModalOpen] = useState(false);
   const [practiceSign, setPracticeSign] = useState(null);
+  const [forwardedTokens, setForwardedTokens] = useState(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -25,6 +26,11 @@ export default function App() {
   const handleSelectSignForPractice = (sign) => {
     setPracticeSign(sign);
     setActivePage('translator');
+  };
+
+  const handleForwardToCounter = (tokens) => {
+    setForwardedTokens(tokens);
+    setActivePage('counter');
   };
 
   return (
@@ -50,6 +56,7 @@ export default function App() {
           <LiveTranslatorPage
             setActivePage={setActivePage}
             initialSelectedSign={practiceSign}
+            onForwardToCounter={handleForwardToCounter}
           />
         )}
 
@@ -63,6 +70,8 @@ export default function App() {
         {activePage === 'counter' && (
           <PublicCounterPage
             setActivePage={setActivePage}
+            forwardedTokens={forwardedTokens}
+            onClearForwarded={() => setForwardedTokens(null)}
           />
         )}
 

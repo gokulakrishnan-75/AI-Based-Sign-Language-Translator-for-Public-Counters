@@ -1,11 +1,19 @@
+import os
 import sys
-sys.path.insert(0, 'signbridge-ai')
-import joblib, json, numpy as np
+import json
+import joblib
+import numpy as np
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(script_dir, "signbridge-ai") if os.path.isdir(os.path.join(script_dir, "signbridge-ai")) else script_dir
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from ml.preprocessing.features import normalize_landmarks
 
-model = joblib.load('signbridge-ai/ml/exported_models/sign_classifier.joblib')
-with open('signbridge-ai/ml/dataset/dataset_summary.json') as f:
-    classes = json.load(f)['classes']
+model = joblib.load(os.path.join(project_root, "ml", "exported_models", "sign_classifier.joblib"))
+with open(os.path.join(project_root, "ml", "dataset", "dataset_summary.json"), "r", encoding="utf-8") as f:
+    classes = json.load(f)["classes"]
 
 # Let's simulate a hand like the user in the image:
 # Wrist at bottom: [0.5, 0.85, 0]

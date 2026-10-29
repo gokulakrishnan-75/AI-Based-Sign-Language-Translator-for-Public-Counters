@@ -1,17 +1,19 @@
-// Client-Side Multi-Frame Prediction Stabilizer
+// Client-Side Multi-Frame Prediction Stabilizer with Strict Single-Prediction Debounce
+// Guarantees ONE prediction per gesture execution — NO continuous repetition while holding!
 
 export class ClientStabilizer {
   constructor(options = {}) {
     this.windowSize = options.windowSize || 5;
-    this.confidenceThreshold = options.confidenceThreshold || 70.0;
-    this.requiredStreak = options.requiredStreak || 3;
-    this.cooldownMs = options.cooldownMs || 1400;
+    this.confidenceThreshold = options.confidenceThreshold !== undefined ? options.confidenceThreshold : 45.0;
+    this.requiredStreak = options.requiredStreak !== undefined ? options.requiredStreak : 2;
+    this.cooldownMs = options.cooldownMs || 1200;
 
     this.history = [];
     this.lastEmittedSign = null;
     this.lastEmittedTime = 0;
     this.currentStreakSign = null;
     this.currentStreakCount = 0;
+    this.noHandFrames = 0;
   }
 
   reset() {
@@ -20,6 +22,11 @@ export class ClientStabilizer {
     this.lastEmittedTime = 0;
     this.currentStreakSign = null;
     this.currentStreakCount = 0;
+    this.noHandFrames = 0;
+  }
+
+  unlock() {
+    this.lastEmittedSign = null;
   }
 
   process(rawPrediction) {
@@ -28,15 +35,27 @@ export class ClientStabilizer {
     if (!rawPrediction || !rawPrediction.sign) {
       this.history = [];
       this.currentStreakCount = 0;
+      this.noHandFrames++;
+
+      // When hand is lowered or absent for at least ~8 frames (~250-300ms),
+      // unlock the gesture lock so the user can deliberately sign it again if desired.
+      if (this.noHandFrames >= 8) {
+        this.lastEmittedSign = null;
+      }
+
       return {
         stabilizedSign: null,
         rawSign: 'NONE',
         confidence: 0,
         status: 'No Hand Detected',
         message: 'No hand detected. Position your hand inside the camera area.',
-        shouldEmit: false
+        shouldEmit: false,
+        isHolding: false
       };
     }
+
+    // Reset absent hand frame counter
+    this.noHandFrames = 0;
 
     const { sign, confidence } = rawPrediction;
 
@@ -50,8 +69,9 @@ export class ClientStabilizer {
         rawSign: sign,
         confidence,
         status: 'Low Confidence',
-        message: 'Gesture detected but confidence is too low (< 70%).',
-        shouldEmit: false
+        message: `Gesture detected but confidence is low (< ${this.confidenceThreshold}%).`,
+        shouldEmit: false,
+        isHolding: false
       };
     }
 
@@ -76,7 +96,8 @@ export class ClientStabilizer {
         confidence,
         status: 'Rejected',
         message: 'Gesture not recognized confidently',
-        shouldEmit: false
+        shouldEmit: false,
+        isHolding: false
       };
     }
 
@@ -102,7 +123,11 @@ export class ClientStabilizer {
     // Check if streak requirement is satisfied
     if (maxCount >= this.requiredStreak && this.currentStreakCount >= this.requiredStreak) {
       const status = avgConfidence >= 85.0 ? 'High Confidence' : 'Moderate Confidence';
-      const isNew = majoritySign !== this.lastEmittedSign || (now - this.lastEmittedTime > this.cooldownMs);
+      
+      // STRICT SINGLE PREDICTION (NO CONTINUOUS PREDICTION WHILE HOLDING):
+      // Only emit ONE TIME when the sign is initially recognized or different from previous sign.
+      // Continuous holding does NOT re-emit!
+      const isNew = majoritySign !== this.lastEmittedSign;
       let shouldEmit = false;
 
       if (isNew) {
@@ -111,13 +136,18 @@ export class ClientStabilizer {
         shouldEmit = true;
       }
 
+      const isHolding = !shouldEmit && (majoritySign === this.lastEmittedSign);
+
       return {
         stabilizedSign: majoritySign,
         rawSign: sign,
         confidence: avgConfidence,
         status,
-        message: `Recognized with ${status.toLowerCase()}`,
-        shouldEmit
+        message: shouldEmit
+          ? `Recognized with ${status.toLowerCase()} (Captured 1x)`
+          : `Holding "${majoritySign}" (Locked 1x - release hand or switch gesture)`,
+        shouldEmit,
+        isHolding
       };
     } else {
       return {
@@ -126,8 +156,10 @@ export class ClientStabilizer {
         confidence: avgConfidence,
         status: 'Stabilizing',
         message: `Stabilizing gesture (${maxCount}/${this.requiredStreak} frames confirmed)`,
-        shouldEmit: false
+        shouldEmit: false,
+        isHolding: false
       };
     }
   }
 }
+

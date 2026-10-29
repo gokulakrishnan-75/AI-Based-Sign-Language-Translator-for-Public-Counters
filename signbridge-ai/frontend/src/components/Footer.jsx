@@ -19,7 +19,7 @@ export default function Footer({ setActivePage }) {
             </p>
             <div className="flex items-center gap-2 text-cyan-400 text-[11px] font-mono">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-              <span>20+ Public Service Signs Supported</span>
+              <span>35 Public Service Signs Supported</span>
             </div>
           </div>
 

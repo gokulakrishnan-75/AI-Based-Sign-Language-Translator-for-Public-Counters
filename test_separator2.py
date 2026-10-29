@@ -59,11 +59,13 @@ def generate_canonical(sign_id):
         extend_finger_straight(hand, 17, np.array([0.72, 0.34, 0.04]))
         hand[4] = [0.26, 0.52, -0.08]
     elif sign_id == "thank_you":
-        extend_finger_straight(hand, 5, np.array([0.45, 0.40, 0.12]))
+        wrist_x = hand[0, 0]
+        hand[:, 0] = wrist_x - (hand[:, 0] - wrist_x)
+        extend_finger_straight(hand, 5, np.array([0.55, 0.40, 0.12]))
         extend_finger_straight(hand, 9, np.array([0.50, 0.38, 0.14]))
-        extend_finger_straight(hand, 13, np.array([0.55, 0.40, 0.12]))
-        extend_finger_straight(hand, 17, np.array([0.60, 0.44, 0.10]))
-        hand[4] = [0.38, 0.52, 0.08]
+        extend_finger_straight(hand, 13, np.array([0.45, 0.40, 0.12]))
+        extend_finger_straight(hand, 17, np.array([0.40, 0.44, 0.10]))
+        hand[4] = [0.62, 0.52, 0.08]
     elif sign_id == "yes":
         curl_finger_tight(hand, 5, 1.0)
         curl_finger_tight(hand, 9, 1.0)
@@ -280,6 +282,11 @@ def generate_canonical(sign_id):
         extend_finger_straight(hand, 9, np.array([0.65, 0.56, 0.04]))
     return hand
 
+import os
+import sys
+script_dir = os.path.dirname(os.path.abspath(__file__))
+if script_dir not in sys.path:
+    sys.path.insert(0, script_dir)
 from test_separator import compute_features
 
 signs = [

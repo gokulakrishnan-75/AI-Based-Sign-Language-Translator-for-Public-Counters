@@ -11,8 +11,8 @@ class PredictionStabilizer:
     def __init__(
         self,
         window_size=5,
-        confidence_threshold=70.0,
-        required_streak=3,
+        confidence_threshold=45.0,
+        required_streak=2,
         cooldown_seconds=1.2
     ):
         self.window_size = window_size
@@ -25,6 +25,7 @@ class PredictionStabilizer:
         self.last_emitted_time = 0
         self.current_streak_sign = None
         self.current_streak_count = 0
+        self.no_hand_frame_count = 0
 
     def reset(self):
         self.history.clear()
@@ -32,6 +33,10 @@ class PredictionStabilizer:
         self.last_emitted_time = 0
         self.current_streak_sign = None
         self.current_streak_count = 0
+        self.no_hand_frame_count = 0
+
+    def unlock(self):
+        self.last_emitted_sign = None
 
     def process_frame(self, raw_prediction):
         """
@@ -49,7 +54,8 @@ class PredictionStabilizer:
             "confidence": 94.6,
             "status": "High Confidence" | "Low Confidence" | "Stabilizing" | "Rejected",
             "message": "Gesture stabilized" or rejection reason,
-            "should_emit": bool (true when newly confirmed and not on cooldown)
+            "should_emit": bool (true ONCE when newly confirmed; false while held),
+            "is_holding": bool
         }
         """
         now = time.time()
@@ -57,15 +63,21 @@ class PredictionStabilizer:
         if raw_prediction is None or "sign" not in raw_prediction:
             self.history.clear()
             self.current_streak_count = 0
+            self.no_hand_frame_count += 1
+            # When hand is absent for ~8 frames (~250ms), unlock gesture lock
+            if self.no_hand_frame_count >= 8:
+                self.last_emitted_sign = None
             return {
                 "stabilized_sign": None,
                 "raw_sign": "NONE",
                 "confidence": 0.0,
                 "status": "No Hand Detected",
                 "message": "No hand detected. Position your hand inside the camera area.",
-                "should_emit": False
+                "should_emit": False,
+                "is_holding": False
             }
 
+        self.no_hand_frame_count = 0
         sign = raw_prediction.get("sign", "UNKNOWN")
         confidence = raw_prediction.get("confidence", 0.0)
 
@@ -79,7 +91,8 @@ class PredictionStabilizer:
                 "confidence": confidence,
                 "status": "Low Confidence",
                 "message": "Gesture detected but confidence is too low (< 70%).",
-                "should_emit": False
+                "should_emit": False,
+                "is_holding": False
             }
 
         # 2. Append to Sliding Window
@@ -101,7 +114,8 @@ class PredictionStabilizer:
                 "confidence": confidence,
                 "status": "Rejected",
                 "message": "Gesture not recognized confidently",
-                "should_emit": False
+                "should_emit": False,
+                "is_holding": False
             }
 
         from collections import Counter
@@ -115,8 +129,10 @@ class PredictionStabilizer:
         if count >= self.required_streak and self.current_streak_count >= self.required_streak:
             status = "High Confidence" if avg_confidence >= 85.0 else "Moderate Confidence"
             
-            # Check duplicate / cooldown
-            is_new = (majority_sign != self.last_emitted_sign) or (now - self.last_emitted_time > self.cooldown_seconds)
+            # STRICT SINGLE PREDICTION:
+            # Only emit ONE TIME when the sign is initially recognized or different from previous sign.
+            # Continuous holding does NOT re-emit!
+            is_new = (majority_sign != self.last_emitted_sign)
             should_emit = False
 
             if is_new:
@@ -124,13 +140,16 @@ class PredictionStabilizer:
                 self.last_emitted_time = now
                 should_emit = True
 
+            is_holding = (not should_emit) and (majority_sign == self.last_emitted_sign)
+
             return {
                 "stabilized_sign": majority_sign,
                 "raw_sign": sign,
                 "confidence": avg_confidence,
                 "status": status,
-                "message": f"Recognized with {status.lower()}",
-                "should_emit": should_emit
+                "message": f"Recognized with {status.lower()} (Captured 1x)" if should_emit else f"Holding {majority_sign} (Locked 1x)",
+                "should_emit": should_emit,
+                "is_holding": is_holding
             }
         else:
             return {
@@ -139,5 +158,6 @@ class PredictionStabilizer:
                 "confidence": avg_confidence,
                 "status": "Stabilizing",
                 "message": f"Stabilizing gesture ({count}/{self.required_streak} frames confirmed)",
-                "should_emit": False
+                "should_emit": False,
+                "is_holding": False
             }

@@ -1,6 +1,11 @@
 import os
 import sys
-sys.path.insert(0, "signbridge-ai")
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(script_dir, "signbridge-ai") if os.path.isdir(os.path.join(script_dir, "signbridge-ai")) else script_dir
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 from ml.dataset.dataset_builder import generate_canonical_sign_landmarks

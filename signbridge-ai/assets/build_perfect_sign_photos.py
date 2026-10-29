@@ -15,9 +15,12 @@ from PIL import Image, ImageFilter, ImageOps, ImageDraw
 WIDTH = 1200
 HEIGHT = 896
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(script_dir, ".."))
+
 DEST_DIRS = [
-    "signbridge-ai/frontend/public/signs",
-    "signbridge-ai/frontend/dist/signs"
+    os.path.join(project_root, "frontend", "public", "signs"),
+    os.path.join(project_root, "frontend", "dist", "signs")
 ]
 
 def create_studio_background(spot_center=(600, 390), spot_radius=540, brightness=1.0):
@@ -117,14 +120,26 @@ def add_motion_indicator(canvas, sign_id):
     
     # Motion arcs or arrows
     if sign_id in ["hello", "goodbye"]:
-        # Waving motion arc at top
-        draw.arc([520, 120, 680, 200], start=200, end=340, fill=cyan, width=3)
-        draw.polygon([(680, 160), (695, 175), (670, 180)], fill=cyan)
-    elif sign_id in ["thank_you", "pay"]:
+        # Waving motion arc over spread fingers
+        draw.arc([160, 180, 320, 260], start=200, end=340, fill=cyan, width=3)
+        draw.polygon([(320, 220), (335, 235), (310, 240)], fill=cyan)
+    elif sign_id == "thank_you":
+        # Left hand outward translation arrow from chin/mouth
+        draw.line([(620, 560), (490, 560)], fill=cyan, width=4)
+        draw.polygon([(490, 550), (470, 560), (490, 570)], fill=cyan)
+    elif sign_id == "help":
+        # Upward supportive lifting arrow
+        draw.line([(570, 780), (570, 710)], fill=cyan, width=4)
+        draw.polygon([(560, 710), (570, 690), (580, 710)], fill=cyan)
+    elif sign_id in ["pay"]:
         # Forward translation arrow
         draw.line([(550, 480), (660, 480)], fill=cyan, width=4)
         draw.polygon([(660, 470), (680, 480), (660, 490)], fill=cyan)
-    elif sign_id in ["please", "sorry"]:
+    elif sign_id == "please":
+        # Subtle gentle arc at the pinky fingertip
+        draw.arc([175, 290, 235, 350], start=200, end=340, fill=cyan, width=3)
+        draw.polygon([(235, 320), (248, 335), (225, 340)], fill=cyan)
+    elif sign_id == "sorry":
         # Heart circular rotation ring
         draw.arc([540, 360, 660, 480], start=30, end=330, fill=emerald, width=3)
         draw.polygon([(655, 410), (670, 395), (660, 425)], fill=emerald)
@@ -143,16 +158,17 @@ def add_motion_indicator(canvas, sign_id):
 
 def generate_all():
     print("Generating authentic, seamlessly blended studio sign photographs...")
-    source_dir = "signbridge-ai/frontend/public/signs"
+    source_dir = os.path.join(project_root, "frontend", "public", "signs")
     
     # 1. Load genuine source photos
-    hello_raw = Image.open(os.path.join(source_dir, "hello.jpg")).convert('RGB')
+    hello_raw = Image.open(os.path.join(source_dir, "real", "hello.jpg")).convert('RGB')
+    wait_raw = Image.open(os.path.join(source_dir, "real", "wait.jpg")).convert('RGB')
     yes_raw = Image.open(os.path.join(source_dir, "yes.jpg")).convert('RGB')
     water_raw = Image.open(os.path.join(source_dir, "water.jpg")).convert('RGB')
-    thank_you_raw = Image.open(os.path.join(source_dir, "thank_you.jpg")).convert('RGB')
+    thank_you_raw = Image.open(os.path.join(source_dir, "real", "thank_you.jpg")).convert('RGB')
     stop_raw = Image.open(os.path.join(source_dir, "stop.jpg")).convert('RGB')
-    help_raw = Image.open(os.path.join(source_dir, "help.jpg")).convert('RGB')
-    please_raw = Image.open(os.path.join(source_dir, "please.jpg")).convert('RGB')
+    help_raw = Image.open(os.path.join(source_dir, "real", "help.jpg")).convert('RGB')
+    please_raw = Image.open(os.path.join(source_dir, "real", "please.jpg")).convert('RGB')
     no_raw = Image.open(os.path.join(source_dir, "no.jpg")).convert('RGB')
     
     # Extract clean RGBA elements with soft bottom fades
@@ -187,10 +203,12 @@ def generate_all():
     add_motion_indicator(bg, "goodbye")
     images["goodbye"] = bg
     
-    # 10. wait (firm open palm facing forward, fingers relaxed)
-    bg = create_studio_background(spot_center=(590, 400))
-    place_hand(bg, stop_hand, (590, 460), scale=0.98, angle=-5)
-    images["wait"] = bg
+    # 10. wait (firm open palm facing forward, all fingers joined together)
+    wait_canvas = wait_raw.copy()
+    draw_w = ImageDraw.Draw(wait_canvas, "RGBA")
+    draw_w.line([(190, 190), (310, 190)], fill=cyan, width=3)
+    draw_w.polygon([(310, 182), (325, 190), (310, 198)], fill=cyan)
+    images["wait"] = wait_canvas
     
     # 11. where (two questioning palms facing upward)
     bg = create_studio_background(spot_center=(600, 420))

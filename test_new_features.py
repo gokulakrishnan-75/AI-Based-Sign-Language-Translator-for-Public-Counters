@@ -62,8 +62,12 @@ def compute_features(pts):
     return feats
 
 if __name__ == '__main__':
+    import os
     import sys
-    sys.path.insert(0, 'signbridge-ai')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.join(script_dir, "signbridge-ai") if os.path.isdir(os.path.join(script_dir, "signbridge-ai")) else script_dir
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
     from ml.dataset.dataset_builder import get_base_neutral_hand
     h = get_base_neutral_hand()
     f = compute_features(h)

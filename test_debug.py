@@ -4,9 +4,11 @@ import glob
 import numpy as np
 
 def check():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.join(script_dir, "signbridge-ai") if os.path.isdir(os.path.join(script_dir, "signbridge-ai")) else script_dir
     classes_to_check = ['hello', 'food', 'stop', 'please', 'thank_you']
     for cls in classes_to_check:
-        sample_file = f'signbridge-ai/ml/dataset/train/{cls}/sample_0000.json'
+        sample_file = os.path.join(project_root, 'ml', 'dataset', 'train', cls, 'sample_0000.json')
         if os.path.exists(sample_file):
             with open(sample_file) as f:
                 d = json.load(f)
